@@ -1,3 +1,5 @@
+import statistics
+
 def init_matrix(fisier, fisier2):
     g = open(fisier,"r")
     ng = int(g.readline())
@@ -89,33 +91,64 @@ A5 = init_A(a5,b5,c5)
 if check_a(a1,a2,a3,a4,a5):
     print("Diagonale nenule")
 
-p = -3
+p = -2
 epsilon = 10 ** p
 
 
 def solve_eq(a,b,c,f,epsilon, A):
     xp = [0]*len(a)
     xc = [0]*len(a)
-    i = 0
-    k = 1
-    i = 0
-    
-    while i < len(a):
-        xc[i] = (f[i] - A[i][i - 1] * xc[i - 1] - A[i][i + 1] * xp[i + 1]) / A[i][i]
+
+    xc[0] = f[0] / A[0][0]
+    i = 1
+
+    while i < len(a) - 1:
+        xc[i] = (f[i] - A[i][i - 1] * xc[i - 1]) / A[i][i]
         i += 1
 
     delta = xc.copy()
+    k = 1
 
-    while min(delta) > epsilon and delta < 10**8 or k < 10000:
+    while min(delta) > epsilon and max(delta) < 10**8 or k < 10000:
+
         xp.clear()
         xp = xc.copy()
 
-        i = 0
-        while i < len(a):
+        xc[0] = f[0] / A[0][0]
+        i = 1
+        while i < len(a) - 1:
             xc[i] = ( f[i] - A[i][i-1] * xc[i-1] - A[i][i+1] * xp[i+1]) / A[i][i]
+            i += 1
+
+        i = 0
+        while i < len(xc):
+            delta[i] = abs(xc[i] - xp[i])
+            i += 1
+
+        if min(delta) <= epsilon:
+            k = 1000000
+
+        k += 1
+
+    return xc
 
 
 
+
+result1 = solve_eq(a1,b1,c1,f1,epsilon,A1)
+print(statistics.mean(result1))
+
+result2 = solve_eq(a2,b2,c2,f2,epsilon,A2)
+print(statistics.mean(result2))
+
+result3 = solve_eq(a3,b3,c3,f3,epsilon,A3)
+print(result3)
+
+result4 = solve_eq(a4,b4,c4,f4,epsilon,A4)
+print(result4)
+
+result5 = solve_eq(a5,b5,c5,f5,epsilon,A5)
+print(statistics.mean(result5))
 
 
 
