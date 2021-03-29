@@ -91,39 +91,40 @@ A5 = init_A(a5,b5,c5)
 if check_a(a1,a2,a3,a4,a5):
     print("Diagonale nenule")
 
-p = -2
+p = -3
 epsilon = 10 ** p
 
 
-def solve_eq(a,b,c,f,epsilon, A):
-    xp = [0]*len(a)
-    xc = [0]*len(a)
-
+def solve_eq(a,f, A):
+    global epsilon
+    xc = [0] * len(a)
     xc[0] = f[0] / A[0][0]
-    i = 1
 
+    i = 1
     while i < len(a) - 1:
         xc[i] = (f[i] - A[i][i - 1] * xc[i - 1]) / A[i][i]
         i += 1
 
+    aux = xc[i]
+    xc[i] = (f[i] - A[i][i - 1] * xc[i - 1] - A[i][i] * aux) / A[i][i]
+
     delta = xc.copy()
     k = 1
 
-    while min(delta) > epsilon and max(delta) < 10**8 or k < 10000:
-
-        xp.clear()
-        xp = xc.copy()
-
+    while min(delta) > epsilon and max(delta) < 10**8 or k < 100000:
+        aux = xc[0]
         xc[0] = f[0] / A[0][0]
+        delta[0] = xc[0] - aux
         i = 1
         while i < len(a) - 1:
-            xc[i] = ( f[i] - A[i][i-1] * xc[i-1] - A[i][i+1] * xp[i+1]) / A[i][i]
+            aux = xc[i]
+            xc[i] = ( f[i] - A[i][i-1] * xc[i-1] - A[i][i+1] * xc[i+1]) / A[i][i]
+            delta[i] = abs(xc[i] - aux)
             i += 1
 
-        i = 0
-        while i < len(xc):
-            delta[i] = abs(xc[i] - xp[i])
-            i += 1
+        aux = xc[i]
+        xc[i] = (f[i] - A[i][i - 1] * xc[i - 1] - A[i][i] * aux) / A[i][i]
+        delta[i] = abs(xc[i] - aux)
 
         if min(delta) <= epsilon:
             k = 1000000
@@ -133,21 +134,19 @@ def solve_eq(a,b,c,f,epsilon, A):
     return xc
 
 
-
-
-result1 = solve_eq(a1,b1,c1,f1,epsilon,A1)
+result1 = solve_eq(a1,f1,A1)
 print(statistics.mean(result1))
 
-result2 = solve_eq(a2,b2,c2,f2,epsilon,A2)
+result2 = solve_eq(a2,f2,A2)
 print(statistics.mean(result2))
 
-result3 = solve_eq(a3,b3,c3,f3,epsilon,A3)
+result3 = solve_eq(a3,f3,A3)
 print(result3)
 
-result4 = solve_eq(a4,b4,c4,f4,epsilon,A4)
+result4 = solve_eq(a4,f4,A4)
 print(result4)
 
-result5 = solve_eq(a5,b5,c5,f5,epsilon,A5)
+result5 = solve_eq(a5,f5,A5)
 print(statistics.mean(result5))
 
 
