@@ -159,9 +159,3 @@ print(statistics.mean(result5))
 
 
 
-
-
-
-
-
-
