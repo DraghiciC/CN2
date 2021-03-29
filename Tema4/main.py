@@ -111,7 +111,7 @@ def solve_eq(a,f, A):
     delta = xc.copy()
     k = 1
 
-    while min(delta) > epsilon and max(delta) < 10**8 or k < 100000:
+    while min(delta) > epsilon and max(delta) < 10**8 and k < 100000:
         aux = xc[0]
         xc[0] = f[0] / A[0][0]
         delta[0] = xc[0] - aux
