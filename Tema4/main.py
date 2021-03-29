@@ -69,7 +69,7 @@ def init_A(a,b,c):
     i = 1
     while i < len(a):
         if i == len(a) - 1:
-            A[i][i - 1] = c[i - 1]
+            A[i][i - 1] = c[len(c)-1]
             A[i][i] = a[i]
         else:
             A[i][i - 1] = c[i - 1]
@@ -111,14 +111,14 @@ def solve_eq(a,f, A):
     delta = xc.copy()
     k = 1
 
-    while min(delta) > epsilon and max(delta) < 10**8 and k < 100000:
+    while min(delta) > epsilon and max(delta) < 10**8 and k < 10000:
         aux = xc[0]
         xc[0] = f[0] / A[0][0]
         delta[0] = xc[0] - aux
         i = 1
         while i < len(a) - 1:
             aux = xc[i]
-            xc[i] = ( f[i] - A[i][i-1] * xc[i-1] - A[i][i+1] * xc[i+1]) / A[i][i]
+            xc[i] = (f[i] - A[i][i-1] * xc[i-1] - A[i][i+1] * xc[i+1]) / A[i][i]
             delta[i] = abs(xc[i] - aux)
             i += 1
 
@@ -126,7 +126,7 @@ def solve_eq(a,f, A):
         xc[i] = (f[i] - A[i][i - 1] * xc[i - 1] - A[i][i] * aux) / A[i][i]
         delta[i] = abs(xc[i] - aux)
 
-        if min(delta) <= epsilon:
+        if statistics.mean(delta) <= epsilon:
             k = 1000000
 
         k += 1
@@ -148,6 +148,13 @@ print(result4)
 
 result5 = solve_eq(a5,f5,A5)
 print(statistics.mean(result5))
+
+
+
+
+
+
+
 
 
 
